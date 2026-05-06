@@ -1,6 +1,5 @@
 alefragnani.project-manager
 enkia.tokyo-night
-github.copilot-chat
 hediet.vscode-drawio
 ms-ceintl.vscode-language-pack-ja
 mushan.vscode-paste-image
