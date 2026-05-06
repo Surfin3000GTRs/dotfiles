@@ -27,24 +27,8 @@ if [ -f /mingw64/share/git/completion/git-completion.bash ]; then
   . /mingw64/share/git/completion/git-completion.bash
 fi
 
-# Aliases
-alias ls='ls --color=auto'
-alias ll='ls -lah'
-alias la='ls -A'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias c='clear'
-
-alias gst='git status -sb'
-alias gaa='git add --all'
-alias gcm='git commit -m'
-alias gco='git switch'
-alias gcb='git switch -c'
-alias gpl='git pull --rebase'
-alias gl='git log --oneline --graph --decorate -20'
-
-# Helpers
-mkcd() { mkdir -p "$1" && cd "$1"; }
-croot() { cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)"; }
-openhere() { explorer.exe .; }
-winpath() { cygpath -w "${1:-$PWD}"; }
+# Aliases and helpers
+BASH_ALIASES_PATH="${BASH_ALIASES_PATH:-$HOME/.bash_aliases}"
+if [ -f "$BASH_ALIASES_PATH" ]; then
+  . "$BASH_ALIASES_PATH"
+fi

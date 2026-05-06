@@ -6,6 +6,7 @@ param(
     [switch]$SkipBash,
     [switch]$SkipStarship,
     [string]$BashRcPath = (Join-Path $HOME '.bashrc'),
+    [string]$BashAliasesPath = (Join-Path $HOME '.bash_aliases'),
     [string]$StarshipConfigPath = (Join-Path $HOME '.config\starship.toml')
 )
 
@@ -83,7 +84,9 @@ if (-not $SkipPowerShell) {
 
 if (-not $SkipBash) {
     $bashTarget = Join-Path $resolvedRepoRoot 'bash\.bashrc'
+    $bashAliasesTarget = Join-Path $resolvedRepoRoot 'bash\.bash_aliases'
     Ensure-ParentDirectory -Path $bashTarget
+    Ensure-ParentDirectory -Path $bashAliasesTarget
 
     if (Test-Path -LiteralPath $BashRcPath) {
         if ($PSCmdlet.ShouldProcess($bashTarget, "Export Bash profile from $BashRcPath")) {
@@ -93,6 +96,16 @@ if (-not $SkipBash) {
     }
     else {
         Write-Host "Bash profile was not found at $BashRcPath; nothing was exported."
+    }
+
+    if (Test-Path -LiteralPath $BashAliasesPath) {
+        if ($PSCmdlet.ShouldProcess($bashAliasesTarget, "Export Bash aliases from $BashAliasesPath")) {
+            Copy-Item -LiteralPath $BashAliasesPath -Destination $bashAliasesTarget -Force
+            Write-Host "Exported Bash aliases to $bashAliasesTarget"
+        }
+    }
+    else {
+        Write-Host "Bash aliases file was not found at $BashAliasesPath; nothing was exported."
     }
 }
 

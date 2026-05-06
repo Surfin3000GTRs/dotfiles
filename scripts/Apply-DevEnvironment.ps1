@@ -7,6 +7,7 @@ param(
     [switch]$SkipBash,
     [switch]$SkipStarship,
     [string]$BashRcPath = (Join-Path $HOME '.bashrc'),
+    [string]$BashAliasesPath = (Join-Path $HOME '.bash_aliases'),
     [string]$StarshipConfigPath = (Join-Path $HOME '.config\starship.toml')
 )
 
@@ -139,7 +140,13 @@ if (-not $SkipBash) {
         throw "Bash profile source not found: $bashSource"
     }
 
+    $bashAliasesSource = Join-Path $resolvedRepoRoot 'bash\.bash_aliases'
+    if (-not (Test-Path -LiteralPath $bashAliasesSource)) {
+        throw "Bash aliases source not found: $bashAliasesSource"
+    }
+
     Ensure-ParentDirectory -Path $BashRcPath
+    Ensure-ParentDirectory -Path $BashAliasesPath
 
     if ($PSCmdlet.ShouldProcess($BashRcPath, "Copy Bash profile from $bashSource")) {
         $backupPath = Backup-File -Path $BashRcPath
@@ -148,6 +155,15 @@ if (-not $SkipBash) {
         }
         Copy-Item -LiteralPath $bashSource -Destination $BashRcPath -Force
         Write-Host "Applied Bash profile to $BashRcPath"
+    }
+
+    if ($PSCmdlet.ShouldProcess($BashAliasesPath, "Copy Bash aliases from $bashAliasesSource")) {
+        $backupPath = Backup-File -Path $BashAliasesPath
+        if ($backupPath) {
+            Write-Host "Backed up Bash aliases to $backupPath"
+        }
+        Copy-Item -LiteralPath $bashAliasesSource -Destination $BashAliasesPath -Force
+        Write-Host "Applied Bash aliases to $BashAliasesPath"
     }
 }
 
