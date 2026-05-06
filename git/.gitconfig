@@ -1,0 +1,6 @@
+# Repo-managed Git settings.
+# Add shared settings here; this file is included from your global Git config.
+#
+# Example:
+# [fetch]
+#     prune = true
