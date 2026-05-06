@@ -24,6 +24,20 @@ function Ensure-ParentDirectory {
     }
 }
 
+function Get-VSCodeCliPath {
+    $codeCommand = Get-Command -Name 'code.cmd' -ErrorAction SilentlyContinue
+    if ($codeCommand) {
+        return $codeCommand.Path
+    }
+
+    $fallbackPath = Join-Path $env:LOCALAPPDATA 'Programs\Microsoft VS Code\bin\code.cmd'
+    if (Test-Path -LiteralPath $fallbackPath) {
+        return $fallbackPath
+    }
+
+    throw "VS Code CLI 'code.cmd' was not found. Install the shell command before exporting extensions."
+}
+
 $resolvedRepoRoot = (Resolve-Path -LiteralPath $RepoRoot).Path
 
 if (-not $SkipVSCode) {
@@ -40,16 +54,13 @@ if (-not $SkipVSCode) {
         Write-Host "Exported VS Code settings to $settingsTarget"
     }
 
-    $codeCommand = Get-Command -Name code -ErrorAction SilentlyContinue
-    if (-not $codeCommand) {
-        throw "VS Code CLI 'code' was not found. Install the shell command before exporting extensions."
-    }
+    $codeCommandPath = Get-VSCodeCliPath
 
     $extensionsTarget = Join-Path $resolvedRepoRoot 'vscode\extensions.txt'
     Ensure-ParentDirectory -Path $extensionsTarget
 
     if ($PSCmdlet.ShouldProcess($extensionsTarget, 'Export VS Code extensions list')) {
-        & $codeCommand.Source --list-extensions | Set-Content -LiteralPath $extensionsTarget
+        & $codeCommandPath --list-extensions | Set-Content -LiteralPath $extensionsTarget
         Write-Host "Exported VS Code extensions to $extensionsTarget"
     }
 }

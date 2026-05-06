@@ -40,6 +40,20 @@ function Ensure-ParentDirectory {
     }
 }
 
+function Get-VSCodeCliPath {
+    $codeCommand = Get-Command -Name 'code.cmd' -ErrorAction SilentlyContinue
+    if ($codeCommand) {
+        return $codeCommand.Path
+    }
+
+    $fallbackPath = Join-Path $env:LOCALAPPDATA 'Programs\Microsoft VS Code\bin\code.cmd'
+    if (Test-Path -LiteralPath $fallbackPath) {
+        return $fallbackPath
+    }
+
+    throw "VS Code CLI 'code.cmd' was not found. Install the shell command or rerun with -SkipVSCode."
+}
+
 $resolvedRepoRoot = (Resolve-Path -LiteralPath $RepoRoot).Path
 
 if (-not $SkipVSCode) {
@@ -63,10 +77,7 @@ if (-not $SkipVSCode) {
     }
 
     if (Test-Path -LiteralPath $extensionsSource) {
-        $codeCommand = Get-Command -Name code -ErrorAction SilentlyContinue
-        if (-not $codeCommand) {
-            throw "VS Code CLI 'code' was not found. Install the shell command or rerun with -SkipVSCode."
-        }
+        $codeCommandPath = Get-VSCodeCliPath
 
         $extensions = Get-Content -LiteralPath $extensionsSource |
             ForEach-Object { $_.Trim() } |
@@ -74,7 +85,7 @@ if (-not $SkipVSCode) {
 
         foreach ($extension in $extensions) {
             if ($PSCmdlet.ShouldProcess($extension, 'Install VS Code extension')) {
-                & $codeCommand.Source --install-extension $extension --force
+                & $codeCommandPath --install-extension $extension --force
             }
         }
     }
