@@ -9,6 +9,8 @@ shopt -s histappend cmdhist checkwinsize
 PROMPT_COMMAND='history -a; history -n'
 
 # Bash options
+# autocd: typing a directory name runs `cd <dir>` automatically.
+# globstar: `**` matches files recursively, e.g. `ls **/*.ps1`.
 shopt -s autocd globstar
 
 # Completion
