@@ -18,5 +18,5 @@ alias gl='git log --oneline --graph --decorate -20'
 
 mkcd() { mkdir -p "$1" && cd "$1"; }
 croot() { cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)"; }
-openhere() { explorer.exe .; }
+wopen() { explorer.exe "$(cygpath -w "${1:-$PWD}")"; }
 winpath() { cygpath -w "${1:-$PWD}"; }
