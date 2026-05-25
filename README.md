@@ -80,6 +80,10 @@ pwsh -File .\scripts\Apply-DevEnvironment.ps1 -SkipBash -SkipStarship
 
 適用先や取り込み元を変えたい場合は、`-BashRcPath`、`-BashAliasesPath`、`-StarshipConfigPath` で上書きできます。
 
+## 仕様詳細
+
+- [VS Code 拡張機能 CLI 管理 仕様](vscode/extensions-cli-spec.md)
+
 ## 運用メモ
 
 - Git の共通設定は `git\.gitconfig` に追記する
