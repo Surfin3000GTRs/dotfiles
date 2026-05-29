@@ -44,5 +44,13 @@
     "terminal.external.windowsExec": "wt.exe",
     "git.autofetch": true,
     "chat.viewSessions.orientation": "stacked",
-    "git.confirmSync": false
+    "git.confirmSync": false,
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "file": "${userHome}\\.copilot\\copilot-instructions.md"
+        }
+    ],
+    "github.copilot.chat.switchAgent.enabled": true,
+    "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [],
+    "markdown.extension.tableFormatter.enabled": false
 }
