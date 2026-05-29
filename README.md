@@ -1,4 +1,4 @@
-# my-vscode-setup
+# dotfiles
 
 Windows の開発環境を Git でまとめて管理するためのリポジトリです。
 
@@ -10,6 +10,7 @@ Windows の開発環境を Git でまとめて管理するためのリポジト�
 | PowerShell プロファイル | `powershell\Microsoft.PowerShell_profile.ps1` |
 | Bash 設定 | `bash\.bashrc`, `bash\.bash_aliases` |
 | Starship 設定 | `starship\starship.toml` |
+| Copilot Skills | `copilot\skills\skils.list` |
 
 ## ディレクトリ構成
 
@@ -18,6 +19,9 @@ Windows の開発環境を Git でまとめて管理するためのリポジト�
 |-- bash
 |   |-- .bash_aliases
 |   `-- .bashrc
+|-- copilot
+|   `-- skills
+|       `-- skils.list
 |-- git
 |   `-- .gitconfig
 |-- powershell
@@ -48,6 +52,7 @@ pwsh -File .\scripts\Apply-DevEnvironment.ps1
 - repo 管理の PowerShell プロファイルをユーザープロファイルへ反映
 - repo 管理の Bash 設定を `$HOME\.bashrc` と `$HOME\.bash_aliases` へ反映
 - repo 管理の Starship 設定を `$HOME\.config\starship.toml` へ反映
+- `copilot\skills\skils.list` にある skill 名ごとに `gh skills install github/awesome-copilot <skill-name>` を実行
 
 既存の `settings.json`、PowerShell プロファイル、Bash 設定、Starship 設定は、上書き前に `.bak` 付きでバックアップされます。
 
@@ -76,6 +81,7 @@ Git 設定は `git\.gitconfig` を直接編集して管理します。`Apply-Dev
 pwsh -File .\scripts\Apply-DevEnvironment.ps1 -SkipGit
 pwsh -File .\scripts\Export-DevEnvironment.ps1 -SkipPowerShell
 pwsh -File .\scripts\Apply-DevEnvironment.ps1 -SkipBash -SkipStarship
+pwsh -File .\scripts\Apply-DevEnvironment.ps1 -SkipCopilot
 ```
 
 適用先や取り込み元を変えたい場合は、`-BashRcPath`、`-BashAliasesPath`、`-StarshipConfigPath` で上書きできます。
@@ -87,4 +93,5 @@ pwsh -File .\scripts\Apply-DevEnvironment.ps1 -SkipBash -SkipStarship
 - Bash の共通設定は `bash\.bashrc` に追記する
 - Bash の alias / helper は `bash\.bash_aliases` に追記する
 - Starship の共通設定は `starship\starship.toml` に追記する
+- Copilot skill のインストール対象は `copilot\skills\skils.list` に 1 行 1 件で追記する
 - VS Code の設定を更新したら `Export-DevEnvironment.ps1` で正本を更新する

@@ -6,6 +6,7 @@ param(
     [switch]$SkipPowerShell,
     [switch]$SkipBash,
     [switch]$SkipStarship,
+    [switch]$SkipCopilot,
     [string]$BashRcPath = (Join-Path $HOME '.bashrc'),
     [string]$BashAliasesPath = (Join-Path $HOME '.bash_aliases'),
     [string]$StarshipConfigPath = (Join-Path $HOME '.config\starship.toml')
@@ -53,6 +54,19 @@ function Get-VSCodeCliPath {
     }
 
     throw "VS Code CLI 'code.cmd' was not found. Install the shell command or rerun with -SkipVSCode."
+}
+
+function Get-GitHubCliPath {
+    $ghCommand = Get-Command -Name gh -ErrorAction SilentlyContinue
+    if ($ghCommand) {
+        if ($ghCommand.CommandType -eq 'Application') {
+            return $ghCommand.Source
+        }
+
+        return $ghCommand.Name
+    }
+
+    throw "GitHub CLI 'gh' was not found. Install it or rerun with -SkipCopilot."
 }
 
 $resolvedRepoRoot = (Resolve-Path -LiteralPath $RepoRoot).Path
@@ -182,5 +196,24 @@ if (-not $SkipStarship) {
         }
         Copy-Item -LiteralPath $starshipSource -Destination $StarshipConfigPath -Force
         Write-Host "Applied Starship config to $StarshipConfigPath"
+    }
+}
+
+if (-not $SkipCopilot) {
+    $skillsSource = Join-Path $resolvedRepoRoot 'copilot\skills\skils.list'
+    if (-not (Test-Path -LiteralPath $skillsSource)) {
+        throw "Copilot skills list not found: $skillsSource"
+    }
+
+    $ghCommandPath = Get-GitHubCliPath
+    $skills = Get-Content -LiteralPath $skillsSource |
+        ForEach-Object { $_.Trim() } |
+        Where-Object { $_ -and -not $_.StartsWith('#') }
+
+    foreach ($skill in $skills) {
+        if ($PSCmdlet.ShouldProcess($skill, 'Install Copilot skill')) {
+            & $ghCommandPath skills install github/awesome-copilot $skill
+            Write-Host "Installed Copilot skill $skill"
+        }
     }
 }
