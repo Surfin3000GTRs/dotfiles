@@ -5,7 +5,6 @@ ms-ceintl.vscode-language-pack-ja
 mushan.vscode-paste-image
 oderwat.indent-rainbow
 pkief.material-icon-theme
-shd101wyy.markdown-preview-enhanced
 usernamehw.errorlens
 yzane.markdown-pdf
 yzhang.markdown-all-in-one
