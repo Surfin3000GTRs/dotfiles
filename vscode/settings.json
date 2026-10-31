@@ -1,7 +1,7 @@
 {
     "workbench.startupEditor": "none",
-    "workbench.colorTheme": "Tokyo Night",
-    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "workbench.iconTheme": "catppuccin-mocha",
     "editor.fontFamily": "'HackGen Console NF', Consolas, 'Courier New', monospace",
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
